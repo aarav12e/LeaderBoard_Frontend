@@ -127,7 +127,7 @@ export default function UserLeaderboard() {
                         IGNITE CLUB - BUGBYTE <br />
                         Providing reliable tech since 2026
                     </p>
-                    <p>Copyright © 2026 - Vishveshwarya Group of Institution</p>
+                    <p>Copyright © 2026 - BugByte</p>
                 </aside>
             </footer>
         </div>
