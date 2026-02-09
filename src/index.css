@@ -1,0 +1,25 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+body {
+  background-color: #0f0f23;
+  /* Fallback debug color */
+}
+
+/* Custom scrollbar to match theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1d232a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #661AE6;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D926A9;
+}

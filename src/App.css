@@ -1,0 +1,27 @@
+/* Custom Animations */
+@keyframes pop {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.4);
+  }
+}
+
+.emoji {
+  display: inline-block;
+  animation: pop 1s infinite alternate;
+}
+
+/* Ensure full height for the root element */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Footer positioning helper if needed, though flex-col on body/root handles it */
+.page-wrapper {
+  flex: 1;
+}
