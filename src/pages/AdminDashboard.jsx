@@ -62,26 +62,7 @@ export default function AdminDashboard() {
 
     const seedData = async () => {
         const data = [
-            { Roll: "0245CYBS019", name: "Prince", points: 20, linkedin: "https://www.linkedin.com/in/prince-kumar-04b443367?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app", github: "https://github.com/Prince-3103" },
-            { Roll: "0255CDS020", name: "Nikhil kumar", points: 20, linkedin: "https://linkedin.com/in/nikhil-kumar08", github: "https://github.com/nikhilkumar609" },
-            { Roll: "0245CSE005", name: "Shayef Kabir", points: 20, linkedin: "http://www.linkedin.com/in/shayef-kabir-b853b0372", github: "https://github.com/shayefkabir2005" },
-            { Roll: "0255CYBS027", name: "Bhavishya ", points: 20, linkedin: "https://in.linkedin.com/in/bhavishya-rajput-56a225399", github: "https://github.com/Deon-Wertz" },
-            { Roll: "0255CDS015", name: "Muskan Bharti", points: 20, linkedin: "https://www.linkedin.com/in/muskan-bharti-b9166a3a2?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app", github: "https://github.com/muskan-0228" },
-            { Roll: "0255CSE036", name: "Priyanka Kumari", points: 20, linkedin: "https://www.linkedin.com/in/priyanka-kumari-5354443a8?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app", github: "https://github.com/Priyanka-798" },
-            { Roll: "0255CSE031", name: "Anupam Kumari", points: 20, linkedin: "https://www.linkedin.com/in/anupam-kumari-8167aa3a8?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app", github: "https://github.com/anupamguptaji123-droid" },
-            { Roll: "0255CSE015", name: "Uma", points: 19, linkedin: "https://www.linkedin.com/in/uma-bharti-2142923a9?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app", github: "https://github.com/uma1529-design" },
-            { Roll: "0255CSE022", name: "Ikra", points: 16, linkedin: "https://www.linkedin.com/in/ikra-choudhary-2757713aa?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app", github: "https://github.com/Ikraera" },
-            { Roll: "0245CSE031", name: "Anoop Kumar", points: 10, linkedin: "https://www.linkedin.com/in/anup-kumar-642562395?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app", github: "https://github.com/voexenz0" },
-            { Roll: "0245CDS043", name: "Riya Kumari", points: 10, linkedin: "https://www.linkedin.com/in/riya-singh-703142353?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app", github: "https://github.com/riyasingh41996-ctrl" },
-            { Roll: "0255CDS025", name: "Satyam Kumar", points: 10, linkedin: "https://www.linkedin.com/in/satyam-kumar-5b5167384?utm_source=share_via&utm_content=profile&utm_medium=member_android", github: "https://github.com/satyamkmr18" },
-            { Roll: "0255CSE001", name: "Harsh Gautam", points: 10, linkedin: "https://www.linkedin.com/in/harsh-gautam-b340b13a9?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app", github: "https://github.com/harshgautam8" },
-            { Roll: "0255CSE059", name: "Raj Maurya", points: 6, linkedin: "https://www.linkedin.com/in/hacker-undefined-08838b385?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app", github: "https://github.com/hacker44401" },
-            { Roll: "0255CSE039", name: "Antriksh Arya", points: 5, linkedin: "", github: "https://github.com/antriksharyagrd-a11y" },
-            { Roll: "0255BBA068", name: "Prema Jaiswal", points: 5, linkedin: "https://www.linkedin.com/in/prema-jaiswal-836658296?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app", github: "" },
-            { Roll: "0255CDS026", name: "Nisha Bharti ", points: 4, linkedin: "", github: "https://github.com/Nisha77-git" },
-            { Roll: "0255CDS035", name: "Prachi Kumari", points: 1, linkedin: "", github: "" },
-            { Roll: "0255EEE004", name: "Tushar Jaiswal", points: 1, linkedin: "", github: "" },
-            { Roll: "0255CDS020", name: "Chikki Kumari", points: 1, linkedin: "", github: "" },
+           
         ];
         if (!confirm("This will add all the sample data provided. Continue?")) return;
         try {
