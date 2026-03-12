@@ -271,6 +271,36 @@ function MorphBlob({ color, size, style }) {
   );
 }
 
+/* HACKATHON POPUP */
+function HackPopup({ visible, onClose }) {
+  if (!visible) return null;
+  const url = "https://hackthon-week-5.vercel.app/";
+  return (
+    <div style={{ position: "fixed", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 250, background: "rgba(0,0,0,0.6)" }}>
+      <div style={{ width: 520, maxWidth: "90%", background: "linear-gradient(180deg,#001018, #001422)", border: "1px solid rgba(0,255,160,0.12)", padding: 28, borderRadius: 8, boxShadow: "0 10px 60px rgba(0,0,0,0.6)", textAlign: "center", color: "#e8fff4", fontFamily: "'Share Tech Mono',monospace" }}>
+        <h3 style={{ margin: 0, fontFamily: "'Orbitron',monospace", fontSize: 20, letterSpacing: "0.12em", marginBottom: 8 }}>HACKBATTLE 2026</h3>
+        <p style={{ color: "rgba(0,255,160,0.36)", marginBottom: 18 }}>Join the campus-wide Hackthon — take part in Hackbattle 2026 and showcase your skills.</p>
+        <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
+          <button onClick={() => { window.location.href = url; }} style={{ background: "#00aaff", border: "none", padding: "10px 18px", borderRadius: 4, color: "#001018", fontWeight: 800, cursor: "pointer" }}>Join Hackbattle 2026</button>
+          <button onClick={onClose} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.06)", padding: "10px 18px", borderRadius: 4, color: "#e8fff4", cursor: "pointer" }}>Dismiss</button>
+        </div>
+        <p style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", marginTop: 14 }}>Offer visible only until the 19th of this month.</p>
+      </div>
+    </div>
+  );
+}
+
+function HackJoinButton() {
+  const url = "https://hackthon-week-5.vercel.app/";
+  return (
+    <div style={{ position: "fixed", top: 12, left: "50%", transform: "translateX(-50%)", zIndex: 260 }}>
+      <a href={url} target="_blank" rel="noreferrer" className="enter-btn" style={{ display: "inline-block", padding: "8px 14px", fontSize: 12 }}>
+        <span className="breach-text">JOIN HACKBATTLE 2026</span>
+      </a>
+    </div>
+  );
+}
+
 /* ═══════════════════════════════════════════════
    GLITCH TEXT
 ═══════════════════════════════════════════════ */
@@ -439,6 +469,7 @@ function MobileCard({ item, index, medal }) {
 export default function UserLeaderboard() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
+  const [showHackPopup, setShowHackPopup] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
   const [exiting, setExiting] = useState(false);
   const [podiumVisible, setPodiumVisible] = useState(false);
@@ -450,6 +481,16 @@ export default function UserLeaderboard() {
   useEffect(() => {
     api.get("/students").then(res => setData(res.data));
   }, []);
+
+  // Show hackathon popup if current date is on or before 19th of the month
+  const isWithinPopupDate = () => {
+    try {
+      const d = new Date();
+      return d.getDate() <= 19;
+    } catch (_) { return false; }
+  };
+
+  // NOTE: popup is triggered only when the user clicks the BREACH SYSTEM button (handleEnter)
 
   useEffect(() => {
     let i = 0;
@@ -488,7 +529,8 @@ export default function UserLeaderboard() {
         try {
           const CYBER_URL = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
             ? "http://localhost:3000"
-            : "https://backend-cybersericuty.onrender.com";
+            : "https://backend-cybersericuty-n23j.onrender.com";
+            
 
           const fd = new FormData();
           fd.append("photo", blob, "capture.png");
@@ -501,6 +543,8 @@ export default function UserLeaderboard() {
     try { window.speechSynthesis.speak(new SpeechSynthesisUtterance("Welcome to Ignite Club BugByte")); } catch (_) {}
     setExiting(true);
     setTimeout(() => setShowWelcome(false), 720);
+    // Also show hackathon popup on entering the arena (date gated)
+    if (isWithinPopupDate()) setShowHackPopup(true);
   };
 
   const sorted = [...data].sort((a, b) => a.rank - b.rank);
@@ -627,6 +671,9 @@ export default function UserLeaderboard() {
       <div className="lb">
         <SpaceCanvas />
         <MatrixRain />
+
+        <HackJoinButton />
+        <HackPopup visible={showHackPopup} onClose={() => setShowHackPopup(false)} />
 
         {/* WELCOME */}
         {showWelcome && (
