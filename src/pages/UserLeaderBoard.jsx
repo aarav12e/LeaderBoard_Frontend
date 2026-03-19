@@ -272,34 +272,34 @@ function MorphBlob({ color, size, style }) {
 }
 
 /* HACKATHON POPUP */
-function HackPopup({ visible, onClose }) {
-  if (!visible) return null;
-  const url = "https://hackthon-week-5.vercel.app/";
-  return (
-    <div style={{ position: "fixed", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 250, background: "rgba(0,0,0,0.6)" }}>
-      <div style={{ width: 520, maxWidth: "90%", background: "linear-gradient(180deg,#001018, #001422)", border: "1px solid rgba(0,255,160,0.12)", padding: 28, borderRadius: 8, boxShadow: "0 10px 60px rgba(0,0,0,0.6)", textAlign: "center", color: "#e8fff4", fontFamily: "'Share Tech Mono',monospace" }}>
-        <h3 style={{ margin: 0, fontFamily: "'Orbitron',monospace", fontSize: 20, letterSpacing: "0.12em", marginBottom: 8 }}>HACKBATTLE 2026</h3>
-        <p style={{ color: "rgba(0,255,160,0.36)", marginBottom: 18 }}>Join the campus-wide Hackthon — take part in Hackbattle 2026 and showcase your skills.</p>
-        <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-          <button onClick={() => { window.location.href = url; }} style={{ background: "#00aaff", border: "none", padding: "10px 18px", borderRadius: 4, color: "#001018", fontWeight: 800, cursor: "pointer" }}>Join Hackbattle 2026</button>
-          <button onClick={onClose} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.06)", padding: "10px 18px", borderRadius: 4, color: "#e8fff4", cursor: "pointer" }}>Dismiss</button>
-        </div>
-        <p style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", marginTop: 14 }}>Offer visible only until the 19th of this month.</p>
-      </div>
-    </div>
-  );
-}
+// function HackPopup({ visible, onClose }) {
+//   if (!visible) return null;
+//   const url = "https://hackthon-week-5.vercel.app/";
+//   return (
+//     <div style={{ position: "fixed", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 250, background: "rgba(0,0,0,0.6)" }}>
+//       <div style={{ width: 520, maxWidth: "90%", background: "linear-gradient(180deg,#001018, #001422)", border: "1px solid rgba(0,255,160,0.12)", padding: 28, borderRadius: 8, boxShadow: "0 10px 60px rgba(0,0,0,0.6)", textAlign: "center", color: "#e8fff4", fontFamily: "'Share Tech Mono',monospace" }}>
+//         <h3 style={{ margin: 0, fontFamily: "'Orbitron',monospace", fontSize: 20, letterSpacing: "0.12em", marginBottom: 8 }}>HACKBATTLE 2026</h3>
+//         <p style={{ color: "rgba(0,255,160,0.36)", marginBottom: 18 }}>Join the campus-wide Hackthon — take part in Hackbattle 2026 and showcase your skills.</p>
+//         <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
+//           <button onClick={() => { window.location.href = url; }} style={{ background: "#00aaff", border: "none", padding: "10px 18px", borderRadius: 4, color: "#001018", fontWeight: 800, cursor: "pointer" }}>Join Hackbattle 2026</button>
+//           <button onClick={onClose} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.06)", padding: "10px 18px", borderRadius: 4, color: "#e8fff4", cursor: "pointer" }}>Dismiss</button>
+//         </div>
+//         <p style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", marginTop: 14 }}>Offer visible only until the 19th of this month.</p>
+//       </div>
+//     </div>
+//   );
+// }
 
-function HackJoinButton() {
-  const url = "https://hackthon-week-5.vercel.app/";
-  return (
-    <div style={{ position: "fixed", top: 12, left: "50%", transform: "translateX(-50%)", zIndex: 260 }}>
-      <a href={url} target="_blank" rel="noreferrer" className="enter-btn" style={{ display: "inline-block", padding: "8px 14px", fontSize: 12 }}>
-        <span className="breach-text">JOIN HACKBATTLE 2026</span>
-      </a>
-    </div>
-  );
-}
+// function HackJoinButton() {
+//   const url = "https://hackthon-week-5.vercel.app/";
+//   return (
+//     <div style={{ position: "fixed", top: 12, left: "50%", transform: "translateX(-50%)", zIndex: 260 }}>
+//       <a href={url} target="_blank" rel="noreferrer" className="enter-btn" style={{ display: "inline-block", padding: "8px 14px", fontSize: 12 }}>
+//         <span className="breach-text">JOIN HACKBATTLE 2026</span>
+//       </a>
+//     </div>
+//   );
+// }
 
 /* ═══════════════════════════════════════════════
    GLITCH TEXT
@@ -398,60 +398,157 @@ function PodiumCard({ student, position, visible }) {
   );
 }
 
+
+/* ═══════════════════════════════════════════════
+   RANK GLOW COLOR HELPER
+═══════════════════════════════════════════════ */
+function rankGlow(rank) {
+  if (rank === 1) return { border: "#ffd700", bg: "rgba(255,215,0,0.04)", bar: "#ffd700" };
+  if (rank === 2) return { border: "#c0c8d8", bg: "rgba(192,200,216,0.035)", bar: "#c0c8d8" };
+  if (rank === 3) return { border: "#cd7f32", bg: "rgba(205,127,50,0.04)", bar: "#cd7f32" };
+  if (rank <= 5)  return { border: "#00aaff", bg: "rgba(0,170,255,0.025)", bar: "#00aaff" };
+  if (rank <= 10) return { border: "rgba(0,255,160,0.4)", bg: "transparent", bar: "#00ffa0" };
+  return { border: "transparent", bg: "transparent", bar: "#00ffa0" };
+}
+
 /* ═══════════════════════════════════════════════
    TERMINAL ROW
 ═══════════════════════════════════════════════ */
-function TerminalRow({ item, index, medal }) {
+function TerminalRow({ item, index, medal, topScore, badges, rankDeltas, highlighted, rowRef, onShare, copied }) {
   const [ref, visible] = useScrollReveal(0.04);
   const [hov, setHov] = useState(false);
-  const rc = item.rank === 1 ? "#00ffcc" : item.rank === 2 ? "#00aaff" : item.rank === 3 ? "#aa00ff" : "rgba(0,255,160,0.25)";
-  const bg = item.rank === 1 ? "rgba(0,255,204,0.04)" : item.rank === 2 ? "rgba(0,170,255,0.03)" : item.rank === 3 ? "rgba(170,0,255,0.03)" : "transparent";
+  const rg = rankGlow(item.rank);
+  const xpPct = topScore > 0 ? Math.round((item.points / topScore) * 100) : 0;
+  const delta = rankDeltas[item.roll];
+  const hasDelta = delta?.hadPrev && delta.delta !== 0;
+
+  // Merge scroll reveal ref + row highlight ref
+  const setRef = el => {
+    if (ref) ref.current = el;
+    if (rowRef) rowRef(el);
+  };
 
   return (
-    <tr ref={ref} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{ opacity: visible ? 1 : 0, transform: visible ? "translateX(0)" : "translateX(-36px)", transition: `opacity 0.5s ease ${index * 0.04}s,transform 0.6s cubic-bezier(0.34,1.2,0.64,1) ${index * 0.04}s`, background: hov ? "rgba(0,255,160,0.035)" : bg, cursor: "default" }}>
-      <td style={{ padding: "14px 16px", textAlign: "center", borderLeft: `3px solid ${hov ? rc : (item.rank <= 3 ? rc + "77" : "transparent")}`, transition: "border-color 0.3s" }}>
-        {medal ? <span style={{ fontSize: 20 }}>{medal}</span>
-          : <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", minWidth: 38, height: 26, borderRadius: 3, fontFamily: "'Share Tech Mono',monospace", fontSize: 11, color: hov ? "#00ffa0" : "rgba(0,255,160,0.35)", background: "rgba(0,255,160,0.05)", border: "1px solid rgba(0,255,160,0.1)", transition: "color 0.2s" }}>#{item.rank}</span>}
+    <tr
+      ref={setRef}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateX(0)" : "translateX(-36px)",
+        transition: `opacity 0.5s ease ${index * 0.04}s,transform 0.6s cubic-bezier(0.34,1.2,0.64,1) ${index * 0.04}s`,
+        background: highlighted
+          ? "rgba(0,255,200,0.08)"
+          : hov ? "rgba(0,255,160,0.035)" : rg.bg,
+        cursor: "default",
+        boxShadow: highlighted ? "inset 0 0 0 1px rgba(0,255,200,0.35),0 0 24px rgba(0,255,200,0.12)" : undefined,
+        animation: highlighted ? "findMePulse 0.7s ease 2" : undefined,
+      }}
+    >
+      {/* RANK + DELTA */}
+      <td style={{ padding: "14px 16px", textAlign: "center", borderLeft: `3px solid ${hov ? rg.border : (item.rank <= 10 ? rg.border : "transparent")}`, transition: "border-color 0.3s", boxShadow: hov && item.rank <= 10 ? `inset 3px 0 12px ${rg.border}55` : "none" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+          {medal ? <span style={{ fontSize: 20 }}>{medal}</span>
+            : <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", minWidth: 38, height: 26, borderRadius: 3, fontFamily: "'Share Tech Mono',monospace", fontSize: 11, color: hov ? rg.bar : "rgba(0,255,160,0.35)", background: "rgba(0,255,160,0.05)", border: "1px solid rgba(0,255,160,0.1)", transition: "color 0.2s" }}>#{item.rank}</span>}
+          {hasDelta && (
+            <span style={{ fontSize: 9, fontFamily: "'Share Tech Mono',monospace", letterSpacing: "0.04em", color: delta.delta > 0 ? "#00ffaa" : "#ff4466", textShadow: delta.delta > 0 ? "0 0 6px #00ffaa88" : "0 0 6px #ff446688" }}>
+              {delta.delta > 0 ? `▲${delta.delta}` : `▼${Math.abs(delta.delta)}`}
+            </span>
+          )}
+        </div>
       </td>
+
+      {/* ROLL */}
       <td style={{ padding: "14px 16px", textAlign: "center", fontFamily: "'Share Tech Mono',monospace", fontSize: 12, color: hov ? "#00ffcc" : "rgba(0,255,200,0.45)", letterSpacing: "0.06em", transition: "color 0.2s" }}>{item.roll}</td>
-      <td style={{ padding: "14px 16px", fontFamily: "'Share Tech Mono',monospace", fontWeight: 600, fontSize: 14, color: hov ? "#e8fff4" : "rgba(200,255,220,0.8)", transition: "color 0.2s", letterSpacing: "0.03em" }}>{item.name}</td>
+
+      {/* NAME + BADGES */}
+      <td style={{ padding: "14px 16px", fontFamily: "'Share Tech Mono',monospace", fontWeight: 600, fontSize: 14, color: hov ? "#e8fff4" : "rgba(200,255,220,0.8)", transition: "color 0.2s", letterSpacing: "0.03em" }}>
+        {item.name}
+        <BadgeRow badges={badges} roll={item.roll} />
+      </td>
+
+      {/* XP + BAR */}
       <td style={{ padding: "14px 16px", textAlign: "center" }}>
         <span style={{ display: "inline-block", padding: "3px 14px", borderRadius: 2, background: hov ? "rgba(0,255,160,0.14)" : "rgba(0,255,160,0.06)", border: `1px solid ${hov ? "rgba(0,255,160,0.5)" : "rgba(0,255,160,0.2)"}`, color: "#00ffa0", fontWeight: 700, fontSize: 13, fontFamily: "'Share Tech Mono',monospace", boxShadow: hov ? "0 0 18px rgba(0,255,160,0.3)" : "none", transition: "all 0.3s", letterSpacing: "0.05em" }}>{item.points}</span>
+        <div style={{ marginTop: 5, height: 3, width: "100%", background: "rgba(0,255,160,0.07)", borderRadius: 2, overflow: "hidden" }}>
+          <div style={{ height: "100%", width: visible ? `${xpPct}%` : "0%", background: `linear-gradient(90deg,${rg.bar},${rg.bar}88)`, borderRadius: 2, transition: `width 1.2s cubic-bezier(0.22,1,0.36,1) ${index * 0.04 + 0.3}s`, boxShadow: `0 0 6px ${rg.bar}88` }} />
+        </div>
       </td>
+
+      {/* LINKS + SHARE */}
       <td style={{ padding: "14px 16px", textAlign: "center" }}>
-        <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+        <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
           {item.linkedin
             ? <a href={item.linkedin} target="_blank" rel="noreferrer" className="lb-link lb-link-blue">⬡ LI</a>
             : <span className="lb-dash">—</span>}
           {item.github
             ? <a href={item.github} target="_blank" rel="noreferrer" className="lb-link lb-link-green">⬡ GH</a>
             : <span className="lb-dash">—</span>}
+          <button onClick={() => onShare(item)} className={`lb-share-btn${copied === item.roll ? " lb-share-btn--ok" : ""}`}>
+            {copied === item.roll ? "✓" : "⎘"}
+          </button>
         </div>
       </td>
     </tr>
   );
 }
 
+
 /* ═══════════════════════════════════════════════
    MOBILE CARD
 ═══════════════════════════════════════════════ */
-function MobileCard({ item, index, medal }) {
+function MobileCard({ item, index, medal, topScore, badges, rankDeltas, highlighted, rowRef, onShare, copied }) {
   const [ref, visible] = useScrollReveal(0.04);
   const [hov, setHov] = useState(false);
-  const rc = item.rank === 1 ? "#00ffcc" : item.rank === 2 ? "#00aaff" : item.rank === 3 ? "#aa00ff" : "rgba(0,255,160,0.18)";
+  const rg = rankGlow(item.rank);
+  const xpPct = topScore > 0 ? Math.round((item.points / topScore) * 100) : 0;
+  const delta = rankDeltas[item.roll];
+  const hasDelta = delta?.hadPrev && delta.delta !== 0;
+  const setRef = el => { if (ref) ref.current = el; if (rowRef) rowRef(el); };
   return (
-    <div ref={ref} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{ background: "rgba(0,4,14,0.82)", borderRadius: 4, padding: 18, border: `1px solid ${hov ? rc + "88" : rc + "33"}`, boxShadow: hov ? `0 0 28px ${rc}22,inset 0 0 24px ${rc}08` : "none", backdropFilter: "blur(18px)", opacity: visible ? 1 : 0, transform: visible ? "translateY(0) scale(1)" : "translateY(30px) scale(0.96)", transition: `opacity 0.55s ease ${index * 0.05}s,transform 0.65s cubic-bezier(0.34,1.3,0.64,1) ${index * 0.05}s,box-shadow 0.3s,border-color 0.3s`, position: "relative", overflow: "hidden" }}>
-      <LightningBorder active={hov} color={rc} />
+    <div
+      ref={setRef}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        background: highlighted ? "rgba(0,255,200,0.07)" : "rgba(0,4,14,0.82)",
+        borderRadius: 4, padding: 18,
+        border: `1px solid ${highlighted ? "rgba(0,255,200,0.4)" : hov ? rg.border + "88" : rg.border + "33"}`,
+        boxShadow: highlighted ? "0 0 28px rgba(0,255,200,0.18)" : hov ? `0 0 28px ${rg.bar}22,inset 0 0 24px ${rg.bar}08` : "none",
+        backdropFilter: "blur(18px)",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0) scale(1)" : "translateY(30px) scale(0.96)",
+        transition: `opacity 0.55s ease ${index * 0.05}s,transform 0.65s cubic-bezier(0.34,1.3,0.64,1) ${index * 0.05}s,box-shadow 0.3s,border-color 0.3s`,
+        position: "relative", overflow: "hidden",
+        animation: highlighted ? "findMePulse 0.7s ease 2" : undefined,
+      }}
+    >
+      <LightningBorder active={hov} color={rg.bar} />
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          {medal ? <span style={{ fontSize: 24 }}>{medal}</span>
-            : <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", minWidth: 36, height: 26, borderRadius: 3, fontFamily: "'Share Tech Mono',monospace", fontSize: 11, color: "rgba(0,255,160,0.4)", background: "rgba(0,255,160,0.05)", border: "1px solid rgba(0,255,160,0.12)" }}>#{item.rank}</span>}
+          {/* Rank + delta */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
+            {medal ? <span style={{ fontSize: 24 }}>{medal}</span>
+              : <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", minWidth: 36, height: 26, borderRadius: 3, fontFamily: "'Share Tech Mono',monospace", fontSize: 11, color: "rgba(0,255,160,0.4)", background: "rgba(0,255,160,0.05)", border: "1px solid rgba(0,255,160,0.12)" }}>#{item.rank}</span>}
+            {hasDelta && <span style={{ fontSize: 9, fontFamily: "'Share Tech Mono',monospace", color: delta.delta > 0 ? "#00ffaa" : "#ff4466" }}>{delta.delta > 0 ? `▲${delta.delta}` : `▼${Math.abs(delta.delta)}`}</span>}
+          </div>
           <div>
-            <p style={{ fontWeight: 700, fontSize: 15, color: "#e8fff4", fontFamily: "'Share Tech Mono',monospace", letterSpacing: "0.03em" }}>{item.name}</p>
+            <p style={{ fontWeight: 700, fontSize: 15, color: "#e8fff4", fontFamily: "'Share Tech Mono',monospace", letterSpacing: "0.03em" }}>
+              {item.name}<BadgeRow badges={badges} roll={item.roll} />
+            </p>
             <p style={{ fontFamily: "'Share Tech Mono',monospace", color: "rgba(0,255,200,0.38)", fontSize: 11, letterSpacing: "0.08em" }}>{item.roll}</p>
           </div>
         </div>
-        <span style={{ display: "inline-block", padding: "4px 14px", borderRadius: 2, background: "rgba(0,255,160,0.08)", border: "1px solid rgba(0,255,160,0.25)", color: "#00ffa0", fontWeight: 700, fontSize: 13, fontFamily: "'Share Tech Mono',monospace" }}>{item.points}</span>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+          <span style={{ display: "inline-block", padding: "4px 14px", borderRadius: 2, background: "rgba(0,255,160,0.08)", border: "1px solid rgba(0,255,160,0.25)", color: "#00ffa0", fontWeight: 700, fontSize: 13, fontFamily: "'Share Tech Mono',monospace" }}>{item.points}</span>
+          <button onClick={() => onShare(item)} className={`lb-share-btn${copied === item.roll ? " lb-share-btn--ok" : ""}`} style={{ fontSize: 11 }}>
+            {copied === item.roll ? "✓ Copied" : "⎘ Share"}
+          </button>
+        </div>
+      </div>
+      {/* XP bar */}
+      <div style={{ marginTop: 10, height: 3, background: "rgba(0,255,160,0.07)", borderRadius: 2, overflow: "hidden" }}>
+        <div style={{ height: "100%", width: visible ? `${xpPct}%` : "0%", background: `linear-gradient(90deg,${rg.bar},${rg.bar}88)`, borderRadius: 2, transition: `width 1.2s cubic-bezier(0.22,1,0.36,1) ${index * 0.05 + 0.3}s`, boxShadow: `0 0 6px ${rg.bar}88` }} />
       </div>
       {(item.linkedin || item.github) && (
         <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
@@ -462,6 +559,68 @@ function MobileCard({ item, index, medal }) {
     </div>
   );
 }
+
+/* ═══════════════════════════════════════════════
+   LOCALSTORAGE RANK HELPERS
+═══════════════════════════════════════════════ */
+const LS_PREV = "lb_prev_ranks_v2";
+const LS_BEST = "lb_best_ranks_v2";
+const lsGet = key => { try { return JSON.parse(localStorage.getItem(key) || "{}"); } catch { return {}; } };
+const lsSet = (key, val) => { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} };
+
+function computeGameData(sorted) {
+  const prev = lsGet(LS_PREV);
+  const bests = lsGet(LS_BEST);
+
+  let topClimber = null, topDelta = 0;
+  const deltas = {}, newBests = {}, newPrev = {}, newBestMap = {};
+
+  sorted.forEach(s => {
+    const prevRank = prev[s.roll];
+    const delta = prevRank != null ? prevRank - s.rank : 0; // positive = improved
+    deltas[s.roll] = { delta, hadPrev: prevRank != null };
+    if (delta > topDelta) { topDelta = delta; topClimber = s.roll; }
+    const bestSoFar = bests[s.roll] != null ? bests[s.roll] : Infinity;
+    newBests[s.roll] = s.rank <= bestSoFar;
+    newPrev[s.roll] = s.rank;
+    newBestMap[s.roll] = Math.min(s.rank, bestSoFar);
+  });
+
+  // Persist for next visit
+  lsSet(LS_PREV, newPrev);
+  lsSet(LS_BEST, newBestMap);
+
+  const badges = {};
+  sorted.forEach(s => {
+    const b = [];
+    if (s.rank <= 3) b.push({ icon: "👑", label: "Top 3 All Time" });
+    const d = deltas[s.roll];
+    if (d.hadPrev && d.delta > 0) b.push({ icon: "🔥", label: "Hot Streak" });
+    if (s.roll === topClimber && topDelta > 0) b.push({ icon: "⚡", label: "Fast Climber" });
+    if (!d.hadPrev) b.push({ icon: "🆕", label: "Newcomer" });
+    if (newBests[s.roll]) b.push({ icon: "⭐", label: "Personal Best" });
+    badges[s.roll] = b;
+  });
+
+  return { deltas, badges, personalBests: newBests };
+}
+
+/* ═══════════════════════════════════════════════
+   BADGE ROW
+═══════════════════════════════════════════════ */
+function BadgeRow({ badges, roll }) {
+  const list = badges[roll] || [];
+  if (!list.length) return null;
+  return (
+    <span style={{ display: "inline-flex", gap: 4, marginLeft: 6, verticalAlign: "middle" }}>
+      {list.map(b => (
+        <span key={b.icon} className="lb-badge">{b.icon}</span>
+      ))}
+    </span>
+  );
+}
+
+
 
 /* ═══════════════════════════════════════════════
    MAIN
@@ -478,9 +637,56 @@ export default function UserLeaderboard() {
   const [typeText, setTypeText] = useState("");
   const fullText = "> ACCESSING IGNITE_CLUB.DB... [OK]\n> DECRYPTING BUGBYTE RANKINGS... [OK]\n> NEURAL LINK ESTABLISHED... [DONE]";
 
+  // Gamification state
+  const [badges, setBadges] = useState({});
+  const [rankDeltas, setRankDeltas] = useState({});
+  const [personalBests, setPersonalBests] = useState({});
+
+  // Find Me
+  const [findInput, setFindInput] = useState("");
+  const [highlightRoll, setHighlightRoll] = useState("");
+  const rowRefs = useRef({});
+
+  // Share copied state
+  const [copied, setCopied] = useState("");
+
   useEffect(() => {
     api.get("/students").then(res => setData(res.data));
   }, []);
+
+  // Compute gamification data after data loads
+  useEffect(() => {
+    if (!data.length) return;
+    const s = [...data].sort((a, b) => a.rank - b.rank);
+    const { deltas, badges: b, personalBests: pb } = computeGameData(s);
+    setRankDeltas(deltas);
+    setBadges(b);
+    setPersonalBests(pb);
+  }, [data]);
+
+  // Find Me — scroll and highlight
+  const handleFindMe = () => {
+    const roll = findInput.trim().toLowerCase();
+    if (!roll) return;
+    const match = sorted.find(s => s.roll.toLowerCase().includes(roll));
+    if (!match) return;
+    setHighlightRoll(match.roll);
+    setSearch(""); // clear search filter so row is visible
+    setTimeout(() => {
+      const el = rowRefs.current[match.roll];
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 80);
+    setTimeout(() => setHighlightRoll(""), 3000);
+  };
+
+  // Share rank
+  const shareRank = (item) => {
+    const text = `I'm #${item.rank} on BugByte 2026 Leaderboard with ${item.points} XP! 🔥 Check the rankings → ${window.location.href}`;
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(item.roll);
+      setTimeout(() => setCopied(""), 1800);
+    });
+  };
 
   // Show hackathon popup if current date is on or before 19th of the month
   const isWithinPopupDate = () => {
@@ -499,7 +705,33 @@ export default function UserLeaderboard() {
   }, []);
 
   useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setPodiumVisible(true); }, { threshold: 0.15 });
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        setPodiumVisible(true);
+        // Subtle synth unlock sound
+        try {
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          const playTone = (freq, startT, dur, type = "sine", gain = 0.12) => {
+            const osc = ctx.createOscillator();
+            const g = ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, ctx.currentTime + startT);
+            osc.frequency.exponentialRampToValueAtTime(freq * 1.5, ctx.currentTime + startT + dur * 0.6);
+            g.gain.setValueAtTime(0, ctx.currentTime + startT);
+            g.gain.linearRampToValueAtTime(gain, ctx.currentTime + startT + 0.04);
+            g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + startT + dur);
+            osc.connect(g); g.connect(ctx.destination);
+            osc.start(ctx.currentTime + startT);
+            osc.stop(ctx.currentTime + startT + dur);
+          };
+          playTone(220, 0, 0.25, "triangle", 0.08);
+          playTone(330, 0.18, 0.25, "sine", 0.1);
+          playTone(440, 0.35, 0.3, "sine", 0.12);
+          playTone(660, 0.55, 0.5, "sine", 0.1);
+          playTone(880, 0.75, 0.6, "triangle", 0.08);
+        } catch (_) { /* audio not supported */ }
+      }
+    }, { threshold: 0.15 });
     if (podiumRef.current) obs.observe(podiumRef.current);
     return () => obs.disconnect();
   }, [data]);
@@ -639,6 +871,62 @@ export default function UserLeaderboard() {
         .lb-link-green:hover{border-color:rgba(0,255,160,0.6);color:#00ffa0;background:rgba(0,255,160,0.1);box-shadow:0 0 14px rgba(0,255,160,0.25)}
         .lb-dash{color:rgba(255,255,255,0.07);font-family:'Share Tech Mono',monospace;font-size:12px}
 
+        /* BADGES */
+        .lb-badge-wrap{position:relative;display:inline-flex;align-items:center}
+        .lb-badge{font-size:14px;cursor:default;filter:drop-shadow(0 0 4px rgba(0,255,200,0.4));transition:transform 0.15s;display:inline-block;line-height:1}
+        .lb-badge:hover{transform:scale(1.3)}
+        .lb-tooltip{
+          position:absolute;
+          bottom:calc(100% + 6px);
+          left:50%;
+          transform:translateX(-50%) translateY(4px);
+          background:rgba(0,4,18,0.97);
+          border:1px solid rgba(0,255,160,0.22);
+          color:rgba(0,255,200,0.85);
+          font-family:'Share Tech Mono',monospace;
+          font-size:9px;
+          letter-spacing:0.12em;
+          padding:4px 9px;
+          border-radius:3px;
+          white-space:nowrap;
+          opacity:0;
+          pointer-events:none;
+          z-index:601;
+          box-shadow:0 4px 18px rgba(0,0,0,0.6),0 0 12px rgba(0,255,160,0.08);
+          transition:opacity 0.15s ease,transform 0.15s ease;
+        }
+        .lb-tooltip::after{
+          content:'';
+          position:absolute;
+          top:100%;
+          left:50%;
+          transform:translateX(-50%);
+          border:4px solid transparent;
+          border-top-color:rgba(0,255,160,0.22);
+        }
+        .lb-badge-wrap:hover .lb-badge{transform:scale(1.3)}
+        .lb-badge-wrap:hover .lb-tooltip{opacity:1;transform:translateX(-50%) translateY(0)}
+
+        /* SHARE BUTTON */
+        .lb-share-btn{background:rgba(0,255,160,0.06);border:1px solid rgba(0,255,160,0.18);color:rgba(0,255,160,0.5);font-family:'Share Tech Mono',monospace;font-size:13px;padding:4px 9px;border-radius:3px;cursor:pointer;transition:all 0.2s;line-height:1}
+        .lb-share-btn:hover{background:rgba(0,255,160,0.12);border-color:rgba(0,255,160,0.5);color:#00ffa0;box-shadow:0 0 10px rgba(0,255,160,0.25)}
+        .lb-share-btn--ok{background:rgba(0,255,160,0.15);border-color:#00ffa0;color:#00ffa0;box-shadow:0 0 14px rgba(0,255,160,0.4)}
+
+        /* PROFILE HOVER CARD */
+        .prof-card{position:fixed;z-index:500;width:240px;background:rgba(0,4,18,0.96);border:1px solid rgba(0,255,160,0.18);border-radius:6px;padding:18px;backdrop-filter:blur(24px);box-shadow:0 0 40px rgba(0,255,160,0.08),0 20px 50px rgba(0,0,0,0.7);pointer-events:auto;animation:fadeUp 0.18s ease both}
+        .prof-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,160,0.4),transparent)}
+
+        /* FIND ME BAR */
+        .find-wrap{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
+        .find-input{background:rgba(0,4,14,0.88);border:1px solid rgba(0,170,255,0.22);border-radius:2px;padding:10px 16px;color:#e0ffe8;font-size:12px;outline:none;font-family:'Share Tech Mono',monospace;letter-spacing:0.06em;width:220px;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:border-color 0.25s}
+        .find-input::placeholder{color:rgba(0,200,255,0.2)}
+        .find-input:focus{border-color:rgba(0,170,255,0.55);box-shadow:0 0 0 2px rgba(0,170,255,0.08)}
+        .find-btn{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:0.14em;padding:10px 16px;border-radius:2px;border:1px solid rgba(0,170,255,0.35);background:rgba(0,170,255,0.08);color:rgba(0,170,255,0.8);cursor:pointer;transition:all 0.22s;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%)}
+        .find-btn:hover{background:rgba(0,170,255,0.18);color:#00aaff;box-shadow:0 0 16px rgba(0,170,255,0.25)}
+
+        /* FIND ME ROW PULSE */
+        @keyframes findMePulse{0%{box-shadow:inset 0 0 0 1px rgba(0,255,200,0.6),0 0 32px rgba(0,255,200,0.25)}50%{box-shadow:inset 0 0 0 1px rgba(0,255,200,0.2),0 0 8px rgba(0,255,200,0.06)}100%{box-shadow:inset 0 0 0 1px rgba(0,255,200,0.6),0 0 32px rgba(0,255,200,0.25)}}
+
         /* SEARCH */
         .search-wrap{display:flex;justify-content:center;position:sticky;top:12px;z-index:40}
         .search-box{position:relative;width:100%;max-width:540px}
@@ -651,6 +939,14 @@ export default function UserLeaderboard() {
         .desktop{display:none}
         .mobile{display:flex;flex-direction:column;gap:10px}
         @media(min-width:768px){.desktop{display:block}.mobile{display:none}}
+
+        /* MOBILE PODIUM — horizontal scroll on small screens */
+        .podium-wrap{display:flex;align-items:flex-end;justify-content:center;gap:clamp(12px,3vw,38px);perspective:1100px}
+        @media(max-width:500px){
+          .podium-wrap{justify-content:flex-start;overflow-x:auto;padding-bottom:12px;gap:14px;scrollbar-width:thin;scrollbar-color:rgba(0,255,160,0.18) transparent}
+          .podium-wrap::-webkit-scrollbar{height:3px}
+          .podium-wrap::-webkit-scrollbar-thumb{background:rgba(0,255,160,0.18);border-radius:99px}
+        }
 
         /* FOOTER */
         .footer{display:flex;flex-direction:column;align-items:center;gap:10px;padding:40px 18px;border-top:1px solid rgba(255,255,255,0.04);position:relative;z-index:3;margin-top:72px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
@@ -672,8 +968,8 @@ export default function UserLeaderboard() {
         <SpaceCanvas />
         <MatrixRain />
 
-        <HackJoinButton />
-        <HackPopup visible={showHackPopup} onClose={() => setShowHackPopup(false)} />
+        {/* <HackJoinButton /> */}
+        {/* <HackPopup visible={showHackPopup} onClose={() => setShowHackPopup(false)} /> */}
 
         {/* WELCOME */}
         {showWelcome && (
@@ -757,7 +1053,7 @@ export default function UserLeaderboard() {
               <p style={{ textAlign: "center", color: "rgba(0,255,160,0.28)", fontSize: 9, letterSpacing: "0.32em", marginBottom: 40, fontFamily: "'Share Tech Mono',monospace" }}>
                 ◈ &nbsp; ELITE OPERATIVES &nbsp; ◈
               </p>
-              <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: "clamp(12px,3vw,38px)", perspective: "1100px" }}>
+              <div className="podium-wrap">
                 <PodiumCard student={top3[1]} position={2} visible={podiumVisible} />
                 <PodiumCard student={top3[0]} position={1} visible={podiumVisible} />
                 <PodiumCard student={top3[2]} position={3} visible={podiumVisible} />
@@ -787,7 +1083,21 @@ export default function UserLeaderboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filtered.map((item, i) => <TerminalRow key={item._id} item={item} index={i} medal={medal(item.rank)} />)}
+                  {filtered.map((item, i) => (
+                    <TerminalRow
+                      key={item._id}
+                      item={item}
+                      index={i}
+                      medal={medal(item.rank)}
+                      topScore={sorted[0]?.points || 0}
+                      badges={badges}
+                      rankDeltas={rankDeltas}
+                      highlighted={highlightRoll === item.roll}
+                      rowRef={el => { rowRefs.current[item.roll] = el; }}
+                      onShare={shareRank}
+                      copied={copied}
+                    />
+                  ))}
                   {filtered.length === 0 && (
                     <tr><td colSpan={5} style={{ textAlign: "center", padding: "52px 0", color: "rgba(0,255,160,0.18)", fontFamily: "'Share Tech Mono',monospace", fontSize: 12, letterSpacing: "0.18em" }}>◈ NO SIGNAL DETECTED ◈</td></tr>
                   )}
@@ -798,7 +1108,21 @@ export default function UserLeaderboard() {
 
           {/* MOBILE */}
           <div className="mobile">
-            {filtered.map((item, i) => <MobileCard key={item._id} item={item} index={i} medal={medal(item.rank)} />)}
+            {filtered.map((item, i) => (
+              <MobileCard
+                key={item._id}
+                item={item}
+                index={i}
+                medal={medal(item.rank)}
+                topScore={sorted[0]?.points || 0}
+                badges={badges}
+                rankDeltas={rankDeltas}
+                highlighted={highlightRoll === item.roll}
+                rowRef={el => { rowRefs.current[item.roll] = el; }}
+                onShare={shareRank}
+                copied={copied}
+              />
+            ))}
             {filtered.length === 0 && (
               <p style={{ textAlign: "center", color: "rgba(0,255,160,0.18)", marginTop: 52, letterSpacing: "0.18em", fontFamily: "'Share Tech Mono',monospace", fontSize: 12 }}>◈ NO SIGNAL DETECTED ◈</p>
             )}

@@ -7,6 +7,23 @@ import toast from "react-hot-toast";
 ───────────────────────────────────────────────────────────── */
 const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@500;600;700&display=swap');`;
 
+/* ── Animated Counter (same as leaderboard) ─────────────────── */
+function Counter({ value, visible, duration = 1200 }) {
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    if (!visible) return;
+    let start = null;
+    const step = ts => {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / duration, 1);
+      setN(Math.round((1 - Math.pow(1 - p, 4)) * value));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [value, visible, duration]);
+  return <>{n.toLocaleString()}</>;
+}
+
 /* ── Particle Canvas (identical to leaderboard) ──────────── */
 function ParticleCanvas() {
     const canvasRef = useRef(null);
@@ -328,6 +345,7 @@ export default function AdminDashboard() {
     const [pointsUpdate, setPointsUpdate] = useState({});
     const [linksUpdate, setLinksUpdate] = useState({});
     const [expandedLinks, setExpandedLinks] = useState({});
+    const [flashRow, setFlashRow] = useState({}); // { [id]: 'success' | 'error' }
 
     const fetchStudents = async () => {
         try {
@@ -357,8 +375,14 @@ export default function AdminDashboard() {
             await api.put(`/students/${id}`, { points: Number(change) });
             toast.success("Points Updated!");
             setPointsUpdate({ ...pointsUpdate, [id]: undefined });
+            setFlashRow(prev => ({ ...prev, [id]: "success" }));
+            setTimeout(() => setFlashRow(prev => ({ ...prev, [id]: null })), 1200);
             fetchStudents();
-        } catch { toast.error("Error updating points"); }
+        } catch {
+            toast.error("Error updating points");
+            setFlashRow(prev => ({ ...prev, [id]: "error" }));
+            setTimeout(() => setFlashRow(prev => ({ ...prev, [id]: null })), 1200);
+        }
     };
 
     const toggleLinkEdit = (id, student) => {
@@ -655,11 +679,13 @@ export default function AdminDashboard() {
                     }}>
                         {[
                             { label: "TOTAL STUDENTS", val: students.length },
-                            { label: "TOTAL POINTS", val: students.reduce((s, d) => s + (d.points || 0), 0).toLocaleString() },
-                            { label: "TOP SCORE", val: sorted[0]?.points ?? "—" },
+                            { label: "TOTAL POINTS", val: students.reduce((s, d) => s + (d.points || 0), 0) },
+                            { label: "TOP SCORE", val: sorted[0]?.points ?? 0 },
                         ].map(({ label, val }) => (
                             <div key={label} style={{ textAlign: "center" }}>
-                                <div style={{ fontFamily: "'Orbitron',monospace", fontWeight: 900, fontSize: "clamp(18px,3vw,26px)", color: "#ef4444", textShadow: "0 0 20px #ef444455" }}>{val}</div>
+                                <div style={{ fontFamily: "'Orbitron',monospace", fontWeight: 900, fontSize: "clamp(18px,3vw,26px)", color: "#ef4444", textShadow: "0 0 20px #ef444455" }}>
+                                    <Counter value={val} visible={true} />
+                                </div>
                                 <div style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: 9, color: "rgba(240,240,240,0.3)", letterSpacing: "0.16em", marginTop: 2 }}>{label}</div>
                             </div>
                         ))}
@@ -713,7 +739,19 @@ export default function AdminDashboard() {
                                     <tbody>
                                         {sorted.map(s => (
                                             <>
-                                                <tr key={s._id}>
+                                                <tr key={s._id} style={{
+                                                    transition: "background 0.4s",
+                                                    background: flashRow[s._id] === "success"
+                                                        ? "rgba(0,220,100,0.12)"
+                                                        : flashRow[s._id] === "error"
+                                                        ? "rgba(239,68,68,0.14)"
+                                                        : undefined,
+                                                    boxShadow: flashRow[s._id] === "success"
+                                                        ? "inset 0 0 20px rgba(0,220,100,0.15)"
+                                                        : flashRow[s._id] === "error"
+                                                        ? "inset 0 0 20px rgba(239,68,68,0.15)"
+                                                        : undefined,
+                                                }}>
                                                     <td>
                                                         <div className="adm-name">{s.name}</div>
                                                         <div className="adm-roll">{s.roll}</div>
