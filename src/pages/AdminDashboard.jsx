@@ -88,6 +88,7 @@ function ParticleCanvas() {
 const ADMINS = [
     { username: "aarav12ee", password: "waterbottle" },
     { username: "kajal", password: "kajal12kajal" },
+    { username: "Ishant_raj_2006", password: "Ishant@845437" },
 ];
 
 /* ─────────────────────────────────────────────────────────────
