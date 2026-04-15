@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function SpaceCanvas() {
   const canvasRef = useRef(null);
@@ -163,8 +163,23 @@ export function CursorTrail() {
   const particles = useRef([]);
   const mouse = useRef({ x: -999, y: -999 });
   const raf = useRef(null);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mediaQuery = window.matchMedia("(hover: hover)");
+    const updateEnabled = () => setEnabled(mediaQuery.matches);
+    updateEnabled();
+    if (mediaQuery.addEventListener) mediaQuery.addEventListener("change", updateEnabled);
+    else mediaQuery.addListener(updateEnabled);
+    return () => {
+      if (mediaQuery.removeEventListener) mediaQuery.removeEventListener("change", updateEnabled);
+      else mediaQuery.removeListener(updateEnabled);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -211,7 +226,8 @@ export function CursorTrail() {
     };
     draw();
     return () => { cancelAnimationFrame(raf.current); window.removeEventListener("resize", resize); window.removeEventListener("mousemove", onMove); };
-  }, []);
+  }, [enabled]);
 
+  if (!enabled) return null;
   return <canvas ref={canvasRef} style={{ position: "fixed", inset: 0, zIndex: 9999, pointerEvents: "none" }} />;
 }

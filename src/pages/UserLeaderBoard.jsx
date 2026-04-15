@@ -107,6 +107,7 @@ export default function UserLeaderboard() {
 
         .typewriter{font-family:'Share Tech Mono',monospace;font-size:12px;color:rgba(0,255,200,0.55);text-align:left;line-height:2;letter-spacing:0.07em;white-space:pre;min-height:58px;margin-bottom:44px}
         .cursor{display:inline-block;width:8px;height:14px;background:#00ffcc;animation:blink 0.75s step-end infinite;vertical-align:bottom}
+        @media(max-width:767px){.cursor{display:none!important}}
         @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 
         .lb-inner{position:relative;z-index:3;max-width:1160px;margin:0 auto;padding:clamp(16px,4vw,52px) clamp(12px,3vw,36px) 0}
