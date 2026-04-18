@@ -10,6 +10,10 @@ export default function UserLeaderboardHero({
   totalPts,
   search,
   setSearch,
+  sortBy,
+  setSortBy,
+  showTopOnly,
+  setShowTopOnly,
   statsRef,
   statsVisible,
 }) {
@@ -83,6 +87,29 @@ export default function UserLeaderboardHero({
             <div className="stat-l">TOTAL XP</div>
           </div>
         </div>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 12, marginBottom: 18 }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "rgba(0,4,14,0.78)", border: "1px solid rgba(0,255,160,0.12)", borderRadius: 4, padding: "10px 12px" }}>
+          <span style={{ fontSize: 10, letterSpacing: "0.18em", color: "rgba(0,255,160,0.35)", textTransform: "uppercase" }}>Sort</span>
+          <select
+            value={sortBy}
+            onChange={e => setSortBy(e.target.value)}
+            style={{ background: "transparent", border: "1px solid rgba(0,255,160,0.15)", color: "#e8fff4", padding: "8px 10px", borderRadius: 3, fontFamily: "'Share Tech Mono',monospace", fontSize: 12, outline: "none", minWidth: 130 }}
+          >
+            <option value="rank">RANK</option>
+            <option value="xp">XP SCORE</option>
+            <option value="name">NAME</option>
+          </select>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setShowTopOnly(prev => !prev)}
+          style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "10px 16px", borderRadius: 3, border: "1px solid rgba(0,255,160,0.18)", background: showTopOnly ? "#00ffcc" : "rgba(0,255,160,0.08)", color: showTopOnly ? "#000308" : "#00ffcc", fontFamily: "'Share Tech Mono',monospace", fontWeight: 700, letterSpacing: "0.12em", cursor: "pointer", transition: "all 0.2s" }}
+        >
+          {showTopOnly ? "SHOW ALL" : "TOP 10"}
+        </button>
       </div>
 
       <div className="fu fu4 search-wrap" style={{ marginBottom: 30 }}>

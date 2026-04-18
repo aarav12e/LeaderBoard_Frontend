@@ -5,7 +5,7 @@ import UserLeaderboardPodium from "../components/UserLeaderboardPodium";
 import UserLeaderboardFooter from "../components/UserLeaderboardFooter";
 import { TerminalRow, MobileCard } from "../components/Table";
 import ProfileCard from "../components/ProfileCard";
-import { SpaceCanvas, MatrixRain, CursorTrail } from "../components/LeaderboardEffects";
+import { SpaceCanvas, MatrixRain } from "../components/LeaderboardEffects";
 import { useScrollReveal, computeGameData } from "../components/LeaderboardHelpers";
 
 export default function UserLeaderboard() {
@@ -20,6 +20,9 @@ export default function UserLeaderboard() {
   const [profileTarget, setProfileTarget] = useState(null);
   const [copied, setCopied] = useState("");
   const [typeText, setTypeText] = useState("");
+  const [sortBy, setSortBy] = useState("rank");
+  const [showTopOnly, setShowTopOnly] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const podiumRef = useRef(null);
 
   const handleProfileClose = () => setProfileTarget(null);
@@ -27,7 +30,13 @@ export default function UserLeaderboard() {
   const [statsRef, statsVisible] = useScrollReveal(0.1);
   const fullText = "> ACCESSING IGNITE_CLUB.DB... [OK]\n> DECRYPTING BUGBYTE RANKINGS... [OK]\n> NEURAL LINK ESTABLISHED......... [GO]";
 
-  useEffect(() => { api.get("/students").then(res => setData(res.data)); }, []);
+  useEffect(() => {
+    setIsLoading(true);
+    api.get("/students")
+      .then(res => setData(res.data))
+      .catch(() => {})
+      .finally(() => setIsLoading(false));
+  }, []);
 
   useEffect(() => {
     if (!data.length) return;
@@ -74,7 +83,14 @@ export default function UserLeaderboard() {
 
   const sorted = [...data].sort((a, b) => a.rank - b.rank);
   const top3 = sorted.slice(0, 3);
-  const filtered = sorted.filter(s => s.roll.toLowerCase().includes(search.toLowerCase()) || s.name.toLowerCase().includes(search.toLowerCase()));
+  const searchLower = search.toLowerCase();
+  const searched = sorted.filter(s => s.roll.toLowerCase().includes(searchLower) || s.name.toLowerCase().includes(searchLower));
+  const sortedResults = [...searched].sort((a, b) => {
+    if (sortBy === "xp") return (b.points || 0) - (a.points || 0);
+    if (sortBy === "name") return a.name.localeCompare(b.name);
+    return a.rank - b.rank;
+  });
+  const filtered = showTopOnly ? sortedResults.slice(0, 10) : sortedResults;
   const medal = r => r === 1 ? "🥇" : r === 2 ? "🥈" : r === 3 ? "🥉" : null;
   const totalPts = sorted.reduce((sum, d) => sum + (d.points || 0), 0);
 
@@ -84,7 +100,7 @@ export default function UserLeaderboard() {
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=VT323&display=swap');
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         html{scroll-behavior:smooth}
-        body{cursor:none!important;background:#000308}
+        body{background:#000308}
 
         .lb{font-family:'Share Tech Mono',monospace;background:#000308;min-height:100vh;overflow-x:hidden;color:#e0ffe8;position:relative}
 
@@ -99,7 +115,7 @@ export default function UserLeaderboard() {
         .corner.br{bottom:18px;right:18px;border-width:0 2px 2px 0}
         @keyframes cPulse{0%,100%{border-color:#00ffcc22}50%{border-color:#00ffcc}}
 
-        .enter-btn{font-family:'Orbitron',monospace;font-weight:900;font-size:clamp(11px,2vw,14px);letter-spacing:0.22em;padding:16px clamp(28px,5vw,60px);border-radius:2px;border:1px solid #00ffcc;background:transparent;color:#00ffcc;cursor:none;position:relative;overflow:hidden;z-index:1;text-shadow:0 0 12px #00ffcc;box-shadow:0 0 24px #00ffcc33,inset 0 0 24px #00ffcc08;transition:all 0.35s;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);animation:btnPulse 2s ease-in-out infinite}
+        .enter-btn{font-family:'Orbitron',monospace;font-weight:900;font-size:clamp(11px,2vw,14px);letter-spacing:0.22em;padding:16px clamp(28px,5vw,60px);border-radius:2px;border:1px solid #00ffcc;background:transparent;color:#00ffcc;cursor:pointer;position:relative;overflow:hidden;z-index:1;text-shadow:0 0 12px #00ffcc;box-shadow:0 0 24px #00ffcc33,inset 0 0 24px #00ffcc08;transition:all 0.35s;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);animation:btnPulse 2s ease-in-out infinite}
         @keyframes btnPulse{0%,100%{box-shadow:0 0 24px #00ffcc33,inset 0 0 24px #00ffcc08}50%{box-shadow:0 0 48px #00ffcc66,inset 0 0 32px #00ffcc18}}
         .enter-btn::before{content:'';position:absolute;inset:0;background:#00ffcc;transform:translateX(-110%);transition:transform 0.4s ease;z-index:-1}
         .enter-btn:hover{color:#000308;text-shadow:none;box-shadow:0 0 50px #00ffcc99;animation:none}
@@ -149,7 +165,7 @@ export default function UserLeaderboard() {
         .lb-table{width:100%;border-collapse:separate;border-spacing:0 3px;padding:10px 14px;position:relative;z-index:1}
         .lb-table thead th{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:0.24em;color:rgba(0,255,160,0.32);padding:14px 18px;text-align:left;border-bottom:1px solid rgba(0,255,160,0.06)}
         .lb-table thead th.c{text-align:center}
-        .lb-table tbody tr{transition:background 0.2s,transform 0.15s;cursor:none}
+        .lb-table tbody tr{transition:background 0.2s,transform 0.15s;cursor:auto}
         .lb-table tbody tr:hover{transform:translateX(3px)}
 
         .lb-link{display:inline-flex;align-items:center;gap:5px;padding:5px 13px;border-radius:2px;font-size:11px;font-family:'Share Tech Mono',monospace;text-decoration:none;transition:all 0.22s;letter-spacing:0.06em;border:1px solid;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%)}
@@ -194,7 +210,7 @@ export default function UserLeaderboard() {
       <div className="lb" onMouseLeave={() => setProfileTarget(null)} onPointerDown={handleProfileClose}>
         <SpaceCanvas />
         <MatrixRain />
-        <CursorTrail />
+        {/* <CursorTrail /> */}
 
         <UserLeaderboardHero
           showWelcome={showWelcome}
@@ -206,14 +222,24 @@ export default function UserLeaderboard() {
           totalPts={totalPts}
           search={search}
           setSearch={setSearch}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          showTopOnly={showTopOnly}
+          setShowTopOnly={setShowTopOnly}
           statsRef={statsRef}
           statsVisible={statsVisible}
         />
 
         <div className="lb-inner">
-          <UserLeaderboardPodium top3={top3} podiumVisible={podiumVisible} podiumRef={podiumRef} />
+          {isLoading ? (
+            <div style={{ textAlign: "center", padding: "84px 0", color: "rgba(0,255,160,0.32)", fontFamily: "'Share Tech Mono',monospace", letterSpacing: "0.18em" }}>
+              ◈ UPDATING LIVE RANKS... HOLD STEADY ◈
+            </div>
+          ) : (
+            <>
+              <UserLeaderboardPodium top3={top3} podiumVisible={podiumVisible} podiumRef={podiumRef} />
 
-          <div className="desktop">
+              <div className="desktop">
             <div className="card-wrap">
               <svg style={{ position: "absolute", width: 0, height: 0 }}>
                 <defs><filter id="lg"><feGaussianBlur stdDeviation="1.2" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter></defs>
@@ -280,6 +306,8 @@ export default function UserLeaderboard() {
               </p>
             )}
           </div>
+        </>
+      )}
         </div>
 
         {profileTarget && <ProfileCard student={profileTarget.student} badges={profileTarget.badges} pos={profileTarget.pos} onClose={handleProfileClose} />}
