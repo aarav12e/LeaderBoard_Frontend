@@ -5,6 +5,7 @@ import { SpaceCanvas, MatrixRain } from "./AdminEffects";
 const ADMINS = [
   { username: "aarav12ee", password: "waterbottle" },
   { username: "kajal", password: "kajal12kajal" },
+  {username: "anupam", password: "anupam123"},
 ];
 
 export default function AdminLogin({ onLogin }) {
