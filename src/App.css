@@ -9,16 +9,19 @@
   }
 }
 
-.emoji {
-  display: inline-block;
-  animation: pop 1s infinite alternate;
+/* Ensure full height for the root element & prevent mobile horizontal overflow */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* Ensure full height for the root element */
 #root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 /* Footer positioning helper if needed, though flex-col on body/root handles it */

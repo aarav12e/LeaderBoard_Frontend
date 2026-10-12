@@ -1,18 +1,15 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { api } from "../services/api";
 import { SpaceCanvas, MatrixRain } from "./AdminEffects";
-
-const ADMINS = [
-  { username: "aarav12ee", password: "waterbottle" },
-  { username: "kajal", password: "kajal12kajal" },
-  {username: "anupam", password: "anupam123"},
-];
+import { EyeIcon, EyeOffIcon, ZapIcon } from "./Icons";
 
 export default function AdminLogin({ onLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [shake, setShake] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [typeText, setTypeText] = useState("");
   const fullText = "> VERIFYING ADMIN CREDENTIALS...\n> LOADING IGNITE_CLUB.DB... [OK]\n> AWAITING AUTHENTICATION... [READY]";
 
@@ -26,18 +23,25 @@ export default function AdminLogin({ onLogin }) {
     return () => clearInterval(iv);
   }, []);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (ADMINS.some(a => a.username === username && a.password === password)) {
+    const cleanUsername = username.trim();
+    const cleanPassword = password.trim();
+    setLoading(true);
+    try {
+      const res = await api.post("/auth/junior-login", { username: cleanUsername, password: cleanPassword });
       sessionStorage.setItem("adminAuth", "true");
+      sessionStorage.setItem("adminToken", res.data.token);
       onLogin();
-      return;
+    } catch (err) {
+      setShake(true);
+      toast.error(err.response?.data?.message || "Access denied — invalid credentials!", {
+        style: { background: "#000814", border: "1px solid rgba(0,255,160,0.2)", color: "#00ffa0", fontFamily: "'Share Tech Mono',monospace", fontSize: 12 },
+      });
+      setTimeout(() => setShake(false), 600);
+    } finally {
+      setLoading(false);
     }
-    setShake(true);
-    toast.error("Access denied — invalid credentials!", {
-      style: { background: "#000814", border: "1px solid rgba(0,255,160,0.2)", color: "#00ffa0", fontFamily: "'Share Tech Mono',monospace", fontSize: 12 },
-    });
-    setTimeout(() => setShake(false), 600);
   };
 
   return (
@@ -91,7 +95,7 @@ export default function AdminLogin({ onLogin }) {
               IGNITE CLUB
             </h1>
             <p style={{ fontFamily: "'VT323',monospace", fontSize: 20, color: "#00aaff", letterSpacing: "0.1em", textShadow: "0 0 14px #00aaff66", marginTop: 4 }}>
-              BUGBYTE — ADMIN TERMINAL
+              CodeCraft — ADMIN TERMINAL
             </p>
             <div style={{ height: 1, background: "linear-gradient(90deg,transparent,#00ffcc55,#00aaff44,transparent)", margin: "20px 0" }} />
           </div>
@@ -105,12 +109,14 @@ export default function AdminLogin({ onLogin }) {
               <label className="login-label">PASSWORD</label>
               <div style={{ position: "relative" }}>
                 <input type={showPassword ? "text" : "password"} className="login-input" value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter password" autoComplete="current-password" required style={{ paddingRight: 46 }} />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", fontSize: 17, lineHeight: 1, color: "rgba(0,255,160,0.4)" }}>
-                  {showPassword ? "🙈" : "👁️"}
+                <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(0,255,160,0.6)" }}>
+                  {showPassword ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
                 </button>
               </div>
             </div>
-            <button type="submit" className="login-btn">⚡ AUTHENTICATE</button>
+            <button type="submit" className="login-btn" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+              <ZapIcon size={16} /> AUTHENTICATE
+            </button>
           </form>
 
           <p style={{ textAlign: "center", marginTop: 22, fontSize: 9, color: "rgba(0,255,160,0.22)", letterSpacing: "0.2em" }}>

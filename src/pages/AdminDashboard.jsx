@@ -43,31 +43,42 @@ export default function AdminDashboard() {
   useEffect(() => { if (isAuthenticated) fetchStudents(); }, [isAuthenticated]);
 
   const submit = async () => {
-    if (!form.roll || !form.name) return toast.error("Roll and Name are required!");
+    if (!form.roll?.trim() || !form.name?.trim()) {
+      return toast.error("Roll Number and Name are required!");
+    }
     try {
-      await api.post("/students", form);
+      const payload = {
+        roll: form.roll.trim(),
+        name: form.name.trim(),
+        points: form.points !== undefined && form.points !== "" ? Number(form.points) : 0,
+        linkedin: form.linkedin?.trim() || "",
+        github: form.github?.trim() || "",
+      };
+      await api.post("/students", payload);
       toast.success("Student Added!", {
         style: { background: "#000814", border: "1px solid rgba(0,255,160,0.3)", color: "#00ffa0", fontFamily: "'Share Tech Mono',monospace", fontSize: 12 },
       });
       setForm({});
       fetchStudents();
-    } catch { toast.error("Error adding student"); }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Error adding student");
+    }
   };
 
   const updatePoints = async (id) => {
     const change = pointsUpdate[id];
-    if (!change) return;
+    if (change === undefined || change === "") return;
     try {
       await api.put(`/students/${id}`, { points: Number(change) });
       toast.success("Points Updated!", {
         style: { background: "#000814", border: "1px solid rgba(0,255,160,0.3)", color: "#00ffa0", fontFamily: "'Share Tech Mono',monospace", fontSize: 12 },
       });
-      setPointsUpdate({ ...pointsUpdate, [id]: undefined });
+      setPointsUpdate(prev => ({ ...prev, [id]: undefined }));
       setFlashRow(prev => ({ ...prev, [id]: "success" }));
       setTimeout(() => setFlashRow(prev => ({ ...prev, [id]: null })), 1200);
       fetchStudents();
-    } catch {
-      toast.error("Error updating points");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Error updating points");
       setFlashRow(prev => ({ ...prev, [id]: "error" }));
       setTimeout(() => setFlashRow(prev => ({ ...prev, [id]: null })), 1200);
     }
@@ -86,13 +97,15 @@ export default function AdminDashboard() {
     const links = linksUpdate[id];
     if (!links) return;
     try {
-      await api.put(`/students/${id}`, { github: links.github, linkedin: links.linkedin });
+      await api.put(`/students/${id}`, { github: links.github || "", linkedin: links.linkedin || "" });
       toast.success("Links Updated!", {
         style: { background: "#000814", border: "1px solid rgba(0,255,160,0.3)", color: "#00ffa0", fontFamily: "'Share Tech Mono',monospace", fontSize: 12 },
       });
       setExpandedLinks(prev => ({ ...prev, [id]: false }));
       fetchStudents();
-    } catch { toast.error("Error updating links"); }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Error updating links");
+    }
   };
 
   const handleDelete = async (id) => {
@@ -103,11 +116,14 @@ export default function AdminDashboard() {
         style: { background: "#000814", border: "1px solid rgba(0,255,160,0.3)", color: "#00ffa0", fontFamily: "'Share Tech Mono',monospace", fontSize: 12 },
       });
       fetchStudents();
-    } catch { toast.error("Error deleting student"); }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Error deleting student");
+    }
   };
 
   const handleLogout = () => {
     sessionStorage.removeItem("adminAuth");
+    sessionStorage.removeItem("adminToken");
     setIsAuthenticated(false);
   };
 

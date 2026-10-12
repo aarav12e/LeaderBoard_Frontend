@@ -1,4 +1,5 @@
 import { Counter } from "./AdminHelpers";
+import { LogoutIcon } from "./Icons";
 
 export default function AdminHeader({ students, totalPts, sorted, onLogout }) {
   return (
@@ -12,12 +13,14 @@ export default function AdminHeader({ students, totalPts, sorted, onLogout }) {
             IGNITE CLUB
           </h1>
           <p style={{ fontFamily: "'VT323',monospace", fontSize: 20, color: "#00aaff", textShadow: "0 0 14px #00aaff66", letterSpacing: "0.1em", marginTop: 4 }}>
-            ▸ BUGBYTE — ADMIN DASHBOARD
+            ▸ CodeCraft — ADMIN DASHBOARD
           </p>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <span className="adm-live"><span className="adm-live-dot" />LIVE UPLINK</span>
-          <button className="adm-logout" onClick={onLogout}>🚪 LOGOUT</button>
+          <button className="adm-logout" onClick={onLogout} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <LogoutIcon size={14} /> LOGOUT
+          </button>
         </div>
       </div>
 

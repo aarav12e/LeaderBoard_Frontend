@@ -21,19 +21,27 @@ export function useScrollReveal(threshold = 0.1) {
 }
 
 export function Counter({ value, visible, duration = 1400 }) {
-  const [n, setN] = useState(0);
+  const numericValue = Number(value) || 0;
+  const [n, setN] = useState(numericValue);
 
   useEffect(() => {
-    if (!visible) return;
+    if (numericValue < 0) {
+      setN(numericValue);
+      return;
+    }
+    if (!visible) {
+      setN(numericValue);
+      return;
+    }
     let start = null;
     const step = ts => {
       if (!start) start = ts;
       const p = Math.min((ts - start) / duration, 1);
-      setN(Math.round((1 - Math.pow(1 - p, 4)) * value));
+      setN(Math.round((1 - Math.pow(1 - p, 4)) * numericValue));
       if (p < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
-  }, [value, visible, duration]);
+  }, [numericValue, visible, duration]);
 
   return <>{n}</>;
 }
@@ -148,10 +156,10 @@ export function computeGameData(sorted) {
   sorted.forEach(s => {
     const b = [];
     const d = deltas[s.roll];
-    if (s.rank <= 3) b.push({ icon: "👑", label: "TOP 3" });
-    if (d.hadPrev && d.delta > 0) b.push({ icon: "🔥", label: "RISING" });
-    if (s.roll === topClimber && topDelta > 0) b.push({ icon: "⚡", label: "CLIMBER" });
-    if (!d.hadPrev) b.push({ icon: "🆕", label: "ROOKIE" });
+    if (s.rank <= 3) b.push({ type: "top3", label: "TOP 3" });
+    if (d.hadPrev && d.delta > 0) b.push({ type: "rising", label: "RISING" });
+    if (s.roll === topClimber && topDelta > 0) b.push({ type: "climber", label: "CLIMBER" });
+    if (!d.hadPrev) b.push({ type: "rookie", label: "ROOKIE" });
     badges[s.roll] = b;
   });
 

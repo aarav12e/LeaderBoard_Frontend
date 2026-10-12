@@ -7,7 +7,7 @@
 ██╔══╝  ██╔══██╗██║   ██║██║╚██╗██║   ██║   ██╔══╝  ██║╚██╗██║██║  ██║
 ██║     ██║  ██║╚██████╔╝██║ ╚████║   ██║   ███████╗██║ ╚████║██████╔╝
 ╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝╚═════╝ 
-                  ✦  B U G B Y T E  2 0 2 6  ✦  I G N I T E  C L U B  ✦
+                  ✦  C o d e C r a f t  2 0 2 6  ✦  I G N I T E  C L U B  ✦
 ```
 
 ### 🌌 A deep-space leaderboard UI — where every rank feels like a launch

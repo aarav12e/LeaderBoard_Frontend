@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { SaveIcon, TrashIcon, EditIcon, CloseIcon, GithubIcon, LinkedinIcon } from "./Icons";
 
 export default function AdminManageStudents({
   filtered,
@@ -73,27 +74,45 @@ export default function AdminManageStudents({
                             onChange={e => setPointsUpdate({ ...pointsUpdate, [s._id]: e.target.value })}
                             onKeyDown={e => e.key === "Enter" && updatePoints(s._id)}
                           />
-                          <button className="adm-btn-icon adm-btn-save" onClick={() => updatePoints(s._id)} title="Save XP">💾</button>
+                          <button className="adm-btn-icon adm-btn-save" onClick={() => updatePoints(s._id)} title="Save XP" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                            <SaveIcon size={14} />
+                          </button>
                         </div>
                       </td>
                       <td>
                         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                          {s.github ? <a href={s.github} target="_blank" rel="noreferrer" title={s.github} style={{ fontSize: 18, lineHeight: 1 }}>🐙</a> : <span style={{ opacity: 0.2, fontSize: 12 }}>—</span>}
-                          {s.linkedin ? <a href={s.linkedin} target="_blank" rel="noreferrer" title={s.linkedin} style={{ fontSize: 18, lineHeight: 1 }}>💼</a> : <span style={{ opacity: 0.2, fontSize: 12 }}>—</span>}
-                          <button className="adm-btn-link-edit" onClick={() => toggleLinkEdit(s._id, s)}>
-                            {expandedLinks[s._id] ? "✕" : "✏️ EDIT"}
+                          {s.github ? (
+                            <a href={s.github} target="_blank" rel="noreferrer" title={s.github} style={{ color: "#00ffa0", display: "inline-flex", alignItems: "center" }}>
+                              <GithubIcon size={16} />
+                            </a>
+                          ) : (
+                            <span style={{ opacity: 0.2, fontSize: 12 }}>—</span>
+                          )}
+                          {s.linkedin ? (
+                            <a href={s.linkedin} target="_blank" rel="noreferrer" title={s.linkedin} style={{ color: "#00aaff", display: "inline-flex", alignItems: "center" }}>
+                              <LinkedinIcon size={16} />
+                            </a>
+                          ) : (
+                            <span style={{ opacity: 0.2, fontSize: 12 }}>—</span>
+                          )}
+                          <button className="adm-btn-link-edit" onClick={() => toggleLinkEdit(s._id, s)} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+                            {expandedLinks[s._id] ? <CloseIcon size={12} /> : <><EditIcon size={12} /> EDIT</>}
                           </button>
                         </div>
                       </td>
                       <td style={{ textAlign: "center" }}>
-                        <button className="adm-btn-icon adm-btn-del" onClick={() => handleDelete(s._id)} title="Delete Operative">🗑️</button>
+                        <button className="adm-btn-icon adm-btn-del" onClick={() => handleDelete(s._id)} title="Delete Operative" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                          <TrashIcon size={14} />
+                        </button>
                       </td>
                     </tr>
                     {expandedLinks[s._id] && (
                       <tr className="adm-link-row">
                         <td colSpan={6}>
                           <div className="adm-link-row-inner">
-                            <span style={{ fontSize: 11, color: "rgba(0,255,160,0.5)", letterSpacing: "0.1em" }}>🐙 GITHUB:</span>
+                            <span style={{ fontSize: 11, color: "rgba(0,255,160,0.7)", letterSpacing: "0.1em", display: "inline-flex", alignItems: "center", gap: 4 }}>
+                              <GithubIcon size={14} /> GITHUB:
+                            </span>
                             <input style={{ ...inputSx, flex: 1, minWidth: 180, padding: "8px 12px" }}
                               placeholder="https://github.com/username"
                               value={linksUpdate[s._id]?.github || ""}
@@ -101,7 +120,9 @@ export default function AdminManageStudents({
                               onBlur={blurSx}
                               onChange={e => setLinksUpdate(prev => ({ ...prev, [s._id]: { ...prev[s._id], github: e.target.value } }))}
                             />
-                            <span style={{ fontSize: 11, color: "rgba(0,255,160,0.5)", letterSpacing: "0.1em" }}>💼 LINKEDIN:</span>
+                            <span style={{ fontSize: 11, color: "rgba(0,255,160,0.7)", letterSpacing: "0.1em", display: "inline-flex", alignItems: "center", gap: 4 }}>
+                              <LinkedinIcon size={14} /> LINKEDIN:
+                            </span>
                             <input style={{ ...inputSx, flex: 1, minWidth: 180, padding: "8px 12px" }}
                               placeholder="https://linkedin.com/in/username"
                               value={linksUpdate[s._id]?.linkedin || ""}
@@ -109,7 +130,9 @@ export default function AdminManageStudents({
                               onBlur={blurSx}
                               onChange={e => setLinksUpdate(prev => ({ ...prev, [s._id]: { ...prev[s._id], linkedin: e.target.value } }))}
                             />
-                            <button className="adm-btn-save-links" onClick={() => updateLinks(s._id)}>💾 SAVE LINKS</button>
+                            <button className="adm-btn-save-links" onClick={() => updateLinks(s._id)} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                              <SaveIcon size={14} /> SAVE LINKS
+                            </button>
                           </div>
                         </td>
                       </tr>

@@ -1,4 +1,6 @@
-﻿import { Glitch, Counter } from "./LeaderboardHelpers";
+import { Glitch, Counter } from "./LeaderboardHelpers";
+import UserLeaderboardPodium from "./UserLeaderboardPodium";
+import { ZapIcon } from "./Icons";
 
 export default function UserLeaderboardHero({
   showWelcome,
@@ -7,6 +9,7 @@ export default function UserLeaderboardHero({
   handleEnter,
   sorted,
   top3,
+  highestPts,
   totalPts,
   search,
   setSearch,
@@ -16,6 +19,8 @@ export default function UserLeaderboardHero({
   setShowTopOnly,
   statsRef,
   statsVisible,
+  podiumVisible,
+  podiumRef,
 }) {
   return (
     <>
@@ -32,12 +37,16 @@ export default function UserLeaderboardHero({
               <Glitch style={{ color: "#00ffcc", textShadow: "0 0 30px #00ffcc88, 0 0 80px #00ffcc22" }}>IGNITE CLUB</Glitch>
             </h1>
             <h2 style={{ fontFamily: "'VT323',monospace", fontSize: "clamp(22px,5vw,42px)", color: "#00aaff", textShadow: "0 0 20px #00aaff77", marginBottom: 10, letterSpacing: "0.1em" }}>
-              BUGBYTE 2026 🎉
+              CodeCraft 2026
             </h2>
             <p style={{ color: "rgba(0,255,160,0.22)", fontSize: 9, letterSpacing: "0.3em", marginBottom: 52, fontFamily: "'Share Tech Mono',monospace" }}>
               VISHVESHWARYA GROUP OF INSTITUTION
             </p>
-            <button className="enter-btn" onClick={handleEnter}><span>⚡ BREACH SYSTEM</span></button>
+            <button className="enter-btn" onClick={handleEnter}>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                <ZapIcon size={16} /> BREACH SYSTEM
+              </span>
+            </button>
           </div>
         </div>
       )}
@@ -56,46 +65,52 @@ export default function UserLeaderboardHero({
         </div>
       )}
 
-      <div className="fu fu1" style={{ textAlign: "center", marginBottom: 46 }}>
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: 22 }}>
+      <section className="hero-shell fu fu1">
+        <div className="hero-kicker-wrap">
           <span className="live"><span className="live-dot" />LIVE UPLINK</span>
         </div>
-        <p style={{ color: "rgba(0,255,160,0.2)", fontSize: 9, letterSpacing: "0.32em", marginBottom: 18, fontFamily: "'Share Tech Mono',monospace" }}>∥ VISHVESHWARYA GROUP OF INSTITUTION ∥</p>
-        <h1 style={{ fontFamily: "'Orbitron',monospace", fontWeight: 900, fontSize: "clamp(26px,6.5vw,58px)", lineHeight: 1.05, marginBottom: 12 }}>
+        <p className="hero-eyebrow">∥ VISHVESHWARYA GROUP OF INSTITUTIONS ∥</p>
+        <h1 className="hero-title">
           <Glitch style={{ color: "#00ffcc", textShadow: "0 0 22px #00ffcc77, 0 0 55px #00ffcc22" }}>IGNITE CLUB</Glitch>
         </h1>
-        <h2 style={{ fontFamily: "'VT323',monospace", fontSize: "clamp(16px,3.5vw,28px)", color: "#00aaff", textShadow: "0 0 18px #00aaff66", marginBottom: 24, letterSpacing: "0.1em" }}>
-          ▸ BUGBYTE — NEURAL LEADERBOARD
+        <h2 className="hero-subtitle">
+          ▸ CodeCraft — NEURAL LEADERBOARD
         </h2>
-        <div className="div" style={{ maxWidth: 460 }} />
-      </div>
+        <UserLeaderboardPodium top3={top3} podiumVisible={podiumVisible} podiumRef={podiumRef} />
+        {/* <p className="hero-description">A live snapshot of the club's builders, competitors, and rising problem-solvers.</p>
+        <div className="div hero-divider" /> */}
+      </section>
 
-      <div className="fu fu2" style={{ marginBottom: 50 }}>
+      <div className="fu fu2 stats-section">
+        {/* <div className="stats-heading">
+          <span>CLUB SNAPSHOT</span>
+          <span className="stats-heading-status"><span className="stats-heading-dot" /> LIVE DATA</span>
+        </div> */}
         <div ref={statsRef} className="stats-bar" style={{ opacity: statsVisible ? 1 : 0, transform: statsVisible ? "none" : "translateY(22px)", transition: "all 0.6s ease 0.1s" }}>
-          <div style={{ textAlign: "center" }}>
-            <div className="stat-v"><Counter value={sorted.length} visible={statsVisible} /></div>
-            <div className="stat-l">OPERATIVES</div>
+          <div className="stat-cell">
+            {/* <div className="stat-v"><Counter value={sorted.length} visible={statsVisible} /></div>
+            <div className="stat-l">ACTIVE MEMBERS</div> */}
           </div>
           <div className="stat-sep" />
-          <div style={{ textAlign: "center" }}>
-            <div className="stat-v"><Counter value={top3[0]?.points || 0} visible={statsVisible} /></div>
-            <div className="stat-l">TOP SCORE</div>
+          <div className="stat-cell stat-cell-highlight">
+            {/* <div className="stat-v">{highestPts}</div>
+            <div className="stat-l">HIGHEST XP</div> */}
           </div>
           <div className="stat-sep" />
-          <div style={{ textAlign: "center" }}>
-            <div className="stat-v"><Counter value={totalPts} visible={statsVisible} /></div>
-            <div className="stat-l">TOTAL XP</div>
+          <div className="stat-cell">
+            {/* <div className="stat-v">{totalPts}</div>
+            <div className="stat-l">TOTAL XP</div> */}
           </div>
         </div>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 12, marginBottom: 18 }}>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "rgba(0,4,14,0.78)", border: "1px solid rgba(0,255,160,0.12)", borderRadius: 4, padding: "10px 12px" }}>
-          <span style={{ fontSize: 10, letterSpacing: "0.18em", color: "rgba(0,255,160,0.35)", textTransform: "uppercase" }}>Sort</span>
+      <div className="leaderboard-tools">
+        <div className="sort-control">
+          <span>Sort</span>
           <select
             value={sortBy}
             onChange={e => setSortBy(e.target.value)}
-            style={{ background: "transparent", border: "1px solid rgba(0,255,160,0.15)", color: "#e8fff4", padding: "8px 10px", borderRadius: 3, fontFamily: "'Share Tech Mono',monospace", fontSize: 12, outline: "none", minWidth: 130 }}
+            className="sort-select"
           >
             <option value="rank">RANK</option>
             <option value="xp">XP SCORE</option>
@@ -104,18 +119,18 @@ export default function UserLeaderboardHero({
         </div>
 
         <button
+          className={`top-toggle${showTopOnly ? " is-active" : ""}`}
           type="button"
           onClick={() => setShowTopOnly(prev => !prev)}
-          style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "10px 16px", borderRadius: 3, border: "1px solid rgba(0,255,160,0.18)", background: showTopOnly ? "#00ffcc" : "rgba(0,255,160,0.08)", color: showTopOnly ? "#000308" : "#00ffcc", fontFamily: "'Share Tech Mono',monospace", fontWeight: 700, letterSpacing: "0.12em", cursor: "pointer", transition: "all 0.2s" }}
         >
           {showTopOnly ? "SHOW ALL" : "TOP 10"}
         </button>
       </div>
 
-      <div className="fu fu4 search-wrap" style={{ marginBottom: 30 }}>
-        <div style={{ position: "relative", width: "100%", maxWidth: 540 }}>
+      <div className="fu fu4 search-wrap">
+        <div className="search-box">
           <span className="search-icon">⬡</span>
-          <input className="search-input" type="text" placeholder="SCAN BY ROLL / NAME..." value={search} onChange={e => setSearch(e.target.value)} />
+          {/* <input className="search-input" type="text" placeholder="SCAN BY ROLL / NAME..." value={search} onChange={e => setSearch(e.target.value)} /> */}
         </div>
       </div>
     </>
